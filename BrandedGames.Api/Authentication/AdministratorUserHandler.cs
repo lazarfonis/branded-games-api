@@ -5,15 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrandedGames.Api.Authentication;
 
+/// <summary>
+/// Authorization handler that grants access only to users with the administrator role.
+/// </summary>
 public class AdministratorUserHandler : AuthorizationHandler<AdministratorUserRequirement>
 {
     private readonly BrandedGamesDbContext db;
 
+    /// <summary>Creates a new <see cref="AdministratorUserHandler"/>.</summary>
+    /// <param name="db">The database context.</param>
     public AdministratorUserHandler(BrandedGamesDbContext db)
     {
         this.db = db;
     }
 
+    /// <summary>Evaluates the administrator requirement for the current request.</summary>
+    /// <param name="context">The authorization handler context.</param>
+    /// <param name="requirement">The requirement being evaluated.</param>
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdministratorUserRequirement requirement)
     {
         var isUserAdministrator = await CheckIfUserIsAdministrator(context);
@@ -28,6 +36,9 @@ public class AdministratorUserHandler : AuthorizationHandler<AdministratorUserRe
         }
     }
 
+    /// <summary>Checks whether the current user has a confirmed email and the administrator role.</summary>
+    /// <param name="context">The authorization handler context.</param>
+    /// <returns><c>true</c> if the user is an administrator; otherwise <c>false</c>.</returns>
     public async Task<bool> CheckIfUserIsAdministrator(AuthorizationHandlerContext context)
     {
         if (!AuthorizationHelper.TryParseUserId(context, out var userId))
@@ -52,6 +63,7 @@ public class AdministratorUserHandler : AuthorizationHandler<AdministratorUserRe
     }
 }
 
+/// <summary>Authorization requirement representing administrator access.</summary>
 public class AdministratorUserRequirement : IAuthorizationRequirement
 {
 }

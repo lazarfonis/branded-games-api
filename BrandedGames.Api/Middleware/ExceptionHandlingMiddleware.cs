@@ -10,12 +10,20 @@ using System.Net;
 
 namespace BrandedGames.Common.Middleware;
 
+/// <summary>
+/// Middleware that catches unhandled exceptions and writes a JSON error response,
+/// mapping known exception types to the appropriate HTTP status code.
+/// </summary>
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate next;
     private readonly IWebHostEnvironment env;
     private readonly ILogger<ExceptionHandlingMiddleware> logger;
 
+    /// <summary>Creates a new <see cref="ExceptionHandlingMiddleware"/>.</summary>
+    /// <param name="next">The next middleware in the pipeline.</param>
+    /// <param name="env">The hosting environment.</param>
+    /// <param name="logger">The logger.</param>
     public ExceptionHandlingMiddleware(RequestDelegate next, IWebHostEnvironment env, ILogger<ExceptionHandlingMiddleware> logger)
     {
         this.next = next;
@@ -23,6 +31,8 @@ public class ExceptionHandlingMiddleware
         this.logger = logger;
     }
 
+    /// <summary>Invokes the middleware for the current request.</summary>
+    /// <param name="context">The HTTP context.</param>
     public async Task Invoke(HttpContext context)
     {
         try

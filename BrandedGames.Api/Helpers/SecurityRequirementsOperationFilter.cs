@@ -10,6 +10,10 @@ using System.Reflection;
 
 namespace BrandedGames.Api.Helpers;
 
+/// <summary>
+/// Swagger operation filter that adds security requirements (and 401/403 responses)
+/// to operations guarded by <see cref="AuthorizeAttribute"/>.
+/// </summary>
 public class SecurityRequirementsOperationFilter : IOperationFilter
 {
     private readonly SecurityRequirementsOperationFilter<AuthorizeAttribute> filter;
@@ -29,12 +33,20 @@ public class SecurityRequirementsOperationFilter : IOperationFilter
         filter = new SecurityRequirementsOperationFilter<AuthorizeAttribute>(policySelector, includeUnauthorizedAndForbiddenResponses, securitySchemaName);
     }
 
+    /// <summary>Applies the security requirements to the given operation.</summary>
+    /// <param name="operation">The OpenAPI operation being built.</param>
+    /// <param name="context">The operation filter context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         filter.Apply(operation, context);
     }
 }
 
+/// <summary>
+/// Generic Swagger operation filter that adds security requirements for operations
+/// guarded by an authorization attribute of type <typeparamref name="T"/>.
+/// </summary>
+/// <typeparam name="T">The authorization attribute type to look for.</typeparam>
 public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T : Attribute
 {
     // inspired by https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs
@@ -59,6 +71,9 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
         this.securitySchemaName = securitySchemaName;
     }
 
+    /// <summary>Applies the security requirements to the given operation.</summary>
+    /// <param name="operation">The OpenAPI operation being built.</param>
+    /// <param name="context">The operation filter context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())

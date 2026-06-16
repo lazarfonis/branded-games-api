@@ -14,16 +14,24 @@ using Microsoft.Extensions.Configuration;
 
 namespace BrandedGames.Core;
 
+/// <summary>
+/// Handles uploading files to the Cloudinary file storage provider.
+/// </summary>
 public class CloudinaryFileManager
 {
     private readonly Cloudinary cloudinary;
 
+    /// <summary>Creates a new <see cref="CloudinaryFileManager"/>.</summary>
+    /// <param name="configuration">Application configuration providing the Cloudinary API key.</param>
     public CloudinaryFileManager(IConfiguration configuration)
     {
         cloudinary = new Cloudinary(configuration["cloudinaryApiKey"]);
         cloudinary.Api.Secure = true;
     }
 
+    /// <summary>Uploads a file to Cloudinary.</summary>
+    /// <param name="file">The file to upload.</param>
+    /// <returns>The Cloudinary upload result, including the stored file URL.</returns>
     public async Task<ImageUploadResult> ProcessFileStorageUpload(IFormFile file)
     {
         using var stream = file.OpenReadStream();
