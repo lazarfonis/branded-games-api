@@ -13,17 +13,26 @@ using System.Threading.Tasks;
 
 namespace BrandedGames.Common.Middleware;
 
+/// <summary>
+/// Middleware that refreshes a valid JWT on each response, returning the new token
+/// in a <c>refreshed-token</c> header unless refresh is explicitly skipped.
+/// </summary>
 public class SessionManagementMiddleware
 {
     private readonly RequestDelegate next;
     private readonly JwtHelper authHelper;
 
+    /// <summary>Creates a new <see cref="SessionManagementMiddleware"/>.</summary>
+    /// <param name="next">The next middleware in the pipeline.</param>
+    /// <param name="configuration">Application configuration used to build the JWT helper.</param>
     public SessionManagementMiddleware(RequestDelegate next, IConfiguration configuration)
     {
         this.next = next;
         authHelper = new JwtHelper(configuration);
     }
 
+    /// <summary>Invokes the middleware for the current request.</summary>
+    /// <param name="context">The HTTP context.</param>
     public async Task Invoke(HttpContext context)
     {
         context.Response.OnStarting(() =>

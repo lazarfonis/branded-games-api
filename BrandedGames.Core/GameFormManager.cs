@@ -15,12 +15,20 @@ using System.Threading.Tasks;
 
 namespace BrandedGames.Core;
 
+/// <summary>
+/// Business logic and data access for <see cref="GameForm"/> entities, including
+/// related features, platforms and uploaded files.
+/// </summary>
 public class GameFormManager
 {
     private readonly BrandedGamesDbContext db;
     private readonly IMapper mapper;
     private readonly CloudinaryFileManager fileManager;
 
+    /// <summary>Creates a new <see cref="GameFormManager"/>.</summary>
+    /// <param name="db">The database context.</param>
+    /// <param name="mapper">The AutoMapper instance.</param>
+    /// <param name="fileManager">The file storage manager used to upload game files.</param>
     public GameFormManager(BrandedGamesDbContext db, IMapper mapper, CloudinaryFileManager fileManager)
     {
         this.db = db;
@@ -28,11 +36,16 @@ public class GameFormManager
         this.fileManager = fileManager;
     }
 
+    /// <summary>Gets all game forms with their features, platforms and files.</summary>
+    /// <returns>The list of all game forms.</returns>
     public async Task<List<GameFormModel>> GetGames()
     {
         return await mapper.ProjectTo<GameFormModel>(db.GameForms).ToListAsync();
     }
 
+    /// <summary>Gets a single game form by its identifier.</summary>
+    /// <param name="id">The game form identifier.</param>
+    /// <returns>The requested game form.</returns>
     public async Task<GameFormModel> GetGame(Guid id)
     {
         var game = await mapper.ProjectTo<GameFormModel>(db.GameForms.Where(g => g.Id == id)).FirstOrDefaultAsync();
@@ -40,6 +53,8 @@ public class GameFormManager
         return game;
     }
 
+    /// <summary>Deletes a game form. Related features and platform links are removed by cascade.</summary>
+    /// <param name="id">The identifier of the game form to delete.</param>
     public async Task DeleteGame(Guid id)
     {
         var game = await db.GameForms.FirstOrDefaultAsync(g => g.Id == id);
@@ -48,6 +63,11 @@ public class GameFormManager
         await db.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Creates a new game form together with its selected features, target platforms and
+    /// uploaded files. The whole operation runs in a single database transaction.
+    /// </summary>
+    /// <param name="model">The game configuration to create.</param>
     public async Task Create(GameFormCreateModel model)
     {
         var gameTypeExists = await db.GameTypes.AnyAsync(gt => gt.Id == model.GameTypeId);
@@ -128,7 +148,7 @@ public class GameFormManager
             await db.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync();
             throw new ValidationException(ErrorCode.InternalServerError);

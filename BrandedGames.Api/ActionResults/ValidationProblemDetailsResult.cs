@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BrandedGames.Api.ActionResults;
 
+/// <summary>
+/// Action result that turns invalid model state into a <see cref="ValidationException"/>
+/// so it is rendered as a consistent JSON validation error response.
+/// </summary>
 public class ValidationProblemDetailsResult : IActionResult
 {
+    /// <summary>Executes the result, throwing a validation exception when model state is invalid.</summary>
+    /// <param name="context">The action context.</param>
     public Task ExecuteResultAsync(ActionContext context)
     {
         if (context.ModelState.IsValid)

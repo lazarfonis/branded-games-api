@@ -2,12 +2,14 @@ using AutoMapper;
 using BrandedGames.Common.Models;
 using BrandedGames.Entities;
 
+/// <summary>
+/// AutoMapper profile defining all entity/view-model mappings used by the API.
+/// </summary>
 public class MapperConfig : Profile
 {
+    /// <summary>Configures the entity/view-model mappings.</summary>
     public MapperConfig()
     {
-        Guid? userId = null;
-
         // Read mappings (entity -> view model)
         CreateMap<PlatformType, PlatformTypeModel>();
         CreateMap<GameType, GameTypeModel>();
