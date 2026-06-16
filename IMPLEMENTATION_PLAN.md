@@ -117,10 +117,11 @@ Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (c
 - [x] Cleared pre-existing dead-code warnings: removed unused `userId` in `MapperConfig`; dropped unused
   `ex` in `GameFormManager.Create` catch → **0 CS compiler warnings**.
 
-### Known remaining (out of scope for Phase 2)
+### Known remaining — DECISION: won't fix
 - `NU1903`: **AutoMapper 13.0.1** has a known high-severity advisory
-  (https://github.com/advisories/GHSA-rvv3-g6hj-g44x). Fixing means a package bump — handle as a
-  separate dependency-update task, not in the docs phase.
+  (https://github.com/advisories/GHSA-rvv3-g6hj-g44x). **Do NOT upgrade AutoMapper or the .NET
+  version.** Newer AutoMapper releases moved to a commercial/paid license, which we are deliberately
+  avoiding. The advisory is accepted as-is; pin versions and do not "fix" this in any future phase.
 
 ### Phase 2 done
 - [x] Committed on `feature/xml-docs`, merged to `main` with `--no-ff`, pushed both branches
@@ -165,6 +166,17 @@ Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (c
 
 - **2026-06-16** — Track: C#/.NET. Test framework: **xUnit**. Ops strategy: **full CRUD on existing
   entities** (target ~15 operations). This session: written plan + this tracker only (no code changes yet).
+- **2026-06-16** — Phase 1 (19 system operations) and Phase 2 (XML docs, zero-warning build) both
+  implemented, committed on feature branches, merged to `main` via `--no-ff`, and pushed.
+- **2026-06-16** — **Dependency policy:** keep AutoMapper (13.0.1) and the .NET version pinned. Newer
+  AutoMapper is commercially licensed, so we will not upgrade. The `NU1903` advisory is accepted; do
+  not attempt to resolve it.
+
+## Resume here (next session)
+- **Next:** Phase 3 — xUnit test project. Plan is below; includes the `ICloudinaryFileManager`
+  refactor so `GameFormManager` is testable without the Cloudinary network call.
+- Remaining after Phase 3: Phase 4 (class diagram + system-operations list artifacts) and Phase 5
+  (release tag `v1.0`).
 
 ## Open items / risks
 
