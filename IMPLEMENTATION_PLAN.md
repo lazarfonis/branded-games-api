@@ -32,7 +32,7 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 | 10 | Build via NuGet | mandatory | ✅ Met | SDK-style projects |
 | 11 | All domain classes tested | mandatory | ❌ | xUnit project |
 | 12 | All system operations tested | mandatory | ❌ | xUnit project |
-| 13 | All documented (XML docs) | mandatory | ❌ | Domain classes + operations |
+| 13 | All documented (XML docs) | mandatory | ✅ Met | Domain classes + all operations (Phase 2); infra intentionally scoped out |
 | 14 | JSON functionality | mandatory | ✅ Met (weak) | API returns JSON; Cloudinary JSON call. Optional hardening below. |
 | 15 | Other course tech | optional | ✅ Bonus | JWT, AutoMapper, NLog, Swagger, Docker |
 
@@ -96,13 +96,34 @@ Strategy: **full CRUD on existing entities** (no new domain). **19 operations to
 
 ---
 
-## Phase 2 — XML documentation  (branch: `feature/xml-docs`)
+## Phase 2 — XML documentation  (branch: `feature/xml-docs`)  ✅ DONE (committed + merged to `main` via `--no-ff`)
 
-- [ ] Add `<GenerateDocumentationFile>true</GenerateDocumentationFile>` to `Core`, `Common`, `Data`, `Entities` csproj
-- [ ] `/// <summary>` on all 8 domain classes (class-level + key properties)
-- [ ] `/// <summary>` + `<param>` + `<returns>` on every manager method (system operation)
-- [ ] `/// <summary>` on every controller action
-- [ ] Build clean with no CS1591 missing-doc warnings on public API (or scope warnings deliberately)
+Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (controller-level
+`<summary>`/`<param>`/`<returns>`, doc-gen for Swagger). Build verified: 0 errors.
+
+- [x] Enabled `<GenerateDocumentationFile>true</GenerateDocumentationFile>` on `Entities` + `Core` (Api already had it).
+      Deliberately **not** on `Common`/`Data` — they hold DTOs/enums/helpers/DbContext, which are neither
+      domain classes nor system operations.
+- [x] `/// <summary>` on all 8 domain classes + properties, plus Identity subclasses + `IEntity` → **Entities: 0 CS1591**
+- [x] `/// <summary>` + `<param>` + `<returns>` on every manager method (system operations) → **Core: 0 CS1591**
+- [x] `/// <summary>` on every controller action (+ class/ctor) → **controllers: 0 CS1591**
+- [x] XML doc files generated: `BrandedGames.Entities.xml`, `BrandedGames.Core.xml`, `BrandedGames.Api.xml`
+- [x] Build clean of doc warnings on the **required** surface (domain classes + system operations)
+
+### Infrastructure docs (optional add-on, completed)
+- [x] Documented all remaining Api infrastructure: auth handlers + requirements, middleware,
+  `MapperConfig`, `BaseController`, `Policies`, `AuthorizationHelper`, `SecurityRequirementsOperationFilter`,
+  `ValidationProblemDetailsResult` → **0 CS1591 across the whole solution**.
+- [x] Cleared pre-existing dead-code warnings: removed unused `userId` in `MapperConfig`; dropped unused
+  `ex` in `GameFormManager.Create` catch → **0 CS compiler warnings**.
+
+### Known remaining (out of scope for Phase 2)
+- `NU1903`: **AutoMapper 13.0.1** has a known high-severity advisory
+  (https://github.com/advisories/GHSA-rvv3-g6hj-g44x). Fixing means a package bump — handle as a
+  separate dependency-update task, not in the docs phase.
+
+### Phase 2 done
+- [x] Committed on `feature/xml-docs`, merged to `main` with `--no-ff`, pushed both branches
 
 ---
 
