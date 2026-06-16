@@ -22,4 +22,36 @@ public class PlatformTypeController: BaseController
         var result = await platformTypeManager.GetPlatforms();
         return Ok(result);
     }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PlatformTypeModel))]
+    public async Task<IActionResult> GetPlatform(Guid id)
+    {
+        var result = await platformTypeManager.GetPlatform(id);
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PlatformTypeModel))]
+    public async Task<IActionResult> CreatePlatform([FromBody] PlatformTypeCreateModel model)
+    {
+        var result = await platformTypeManager.CreatePlatform(model);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PlatformTypeModel))]
+    public async Task<IActionResult> UpdatePlatform(Guid id, [FromBody] PlatformTypeUpdateModel model)
+    {
+        var result = await platformTypeManager.UpdatePlatform(id, model);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeletePlatform(Guid id)
+    {
+        await platformTypeManager.DeletePlatform(id);
+        return NoContent();
+    }
 }

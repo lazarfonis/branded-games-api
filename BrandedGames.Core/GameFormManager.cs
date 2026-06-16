@@ -28,6 +28,26 @@ public class GameFormManager
         this.fileManager = fileManager;
     }
 
+    public async Task<List<GameFormModel>> GetGames()
+    {
+        return await mapper.ProjectTo<GameFormModel>(db.GameForms).ToListAsync();
+    }
+
+    public async Task<GameFormModel> GetGame(Guid id)
+    {
+        var game = await mapper.ProjectTo<GameFormModel>(db.GameForms.Where(g => g.Id == id)).FirstOrDefaultAsync();
+        ValidationHelper.MustExist<GameForm>(game != null);
+        return game;
+    }
+
+    public async Task DeleteGame(Guid id)
+    {
+        var game = await db.GameForms.FirstOrDefaultAsync(g => g.Id == id);
+        ValidationHelper.MustExist(game);
+        db.GameForms.Remove(game);
+        await db.SaveChangesAsync();
+    }
+
     public async Task Create(GameFormCreateModel model)
     {
         var gameTypeExists = await db.GameTypes.AnyAsync(gt => gt.Id == model.GameTypeId);
