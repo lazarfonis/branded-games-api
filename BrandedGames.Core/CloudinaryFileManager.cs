@@ -17,7 +17,7 @@ namespace BrandedGames.Core;
 /// <summary>
 /// Handles uploading files to the Cloudinary file storage provider.
 /// </summary>
-public class CloudinaryFileManager
+public class CloudinaryFileManager : ICloudinaryFileManager
 {
     private readonly Cloudinary cloudinary;
 

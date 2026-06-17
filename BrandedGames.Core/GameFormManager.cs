@@ -23,13 +23,13 @@ public class GameFormManager
 {
     private readonly BrandedGamesDbContext db;
     private readonly IMapper mapper;
-    private readonly CloudinaryFileManager fileManager;
+    private readonly ICloudinaryFileManager fileManager;
 
     /// <summary>Creates a new <see cref="GameFormManager"/>.</summary>
     /// <param name="db">The database context.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
     /// <param name="fileManager">The file storage manager used to upload game files.</param>
-    public GameFormManager(BrandedGamesDbContext db, IMapper mapper, CloudinaryFileManager fileManager)
+    public GameFormManager(BrandedGamesDbContext db, IMapper mapper, ICloudinaryFileManager fileManager)
     {
         this.db = db;
         this.mapper = mapper;
