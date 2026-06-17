@@ -30,8 +30,8 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 | 8 | Tags | mandatory | ❌ | Tag `v1.0` at the end |
 | 9 | Hosted (GitHub) | — | ✅ Met | `origin/main` exists |
 | 10 | Build via NuGet | mandatory | ✅ Met | SDK-style projects |
-| 11 | All domain classes tested | mandatory | ❌ | xUnit project |
-| 12 | All system operations tested | mandatory | ❌ | xUnit project |
+| 11 | All domain classes tested | mandatory | ✅ Met | `BrandedGames.Tests` (xUnit) — domain test class per entity |
+| 12 | All system operations tested | mandatory | ✅ Met | `BrandedGames.Tests` (xUnit) — manager test class per operation |
 | 13 | All documented (XML docs) | mandatory | ✅ Met | Domain classes + all operations (Phase 2); infra intentionally scoped out |
 | 14 | JSON functionality | mandatory | ✅ Met (weak) | API returns JSON; Cloudinary JSON call. Optional hardening below. |
 | 15 | Other course tech | optional | ✅ Bonus | JWT, AutoMapper, NLog, Swagger, Docker |
@@ -128,19 +128,28 @@ Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (c
 
 ---
 
-## Phase 3 — xUnit test project  (branch: `feature/unit-tests`)
+## Phase 3 — xUnit test project  (branch: `feature/unit-tests`)  ✅ DONE (committed + merged to `main` via `--no-ff`)
 
-- [ ] Create `BrandedGames.Tests` (xUnit), add to `BrandedGames.sln`
-- [ ] NuGet: `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`,
-      `Microsoft.EntityFrameworkCore.InMemory` (or SQLite in-memory), `AutoMapper`, `Moq`
-- [ ] Test infra: in-memory `BrandedGamesDbContext` factory + `IMapper` built from `MapperConfig`
-- [ ] **Refactor for testability:** extract `ICloudinaryFileManager` so `GameFormManager` can be tested
-      without hitting the Cloudinary network (inject a fake/Moq)
-- [ ] **Domain class tests** — one test class per entity; verify construction, property get/set,
-      collection defaults initialized (covers requirement #11)
-- [ ] **System operation tests** — one test class per manager; each operation gets happy-path +
-      not-found/validation-path tests (covers requirement #12)
-- [ ] `dotnet test` green
+**52 tests, all green.** `dotnet test` passes; full-solution build clean of new warnings (only the
+accepted NU1903 AutoMapper advisory remains).
+
+- [x] Create `BrandedGames.Tests` (xUnit), add to `BrandedGames.sln`
+- [x] NuGet: `xunit` 2.9.2, `xunit.runner.visualstudio` 2.8.2, `Microsoft.NET.Test.Sdk` 17.11.1,
+      `Microsoft.EntityFrameworkCore.InMemory` 8.0.11, `AutoMapper` 13.0.1 (pinned per policy), `Moq` 4.20.72
+- [x] Test infra: `TestDbContextFactory` (in-memory `BrandedGamesDbContext`, unique store per test,
+      `TransactionIgnoredWarning` suppressed) + `TestMapper` (`IMapper` built from `MapperConfig`)
+- [x] **Refactor for testability:** extracted `ICloudinaryFileManager` (Core); `CloudinaryFileManager`
+      implements it; `GameFormManager` depends on the interface; DI registers
+      `AddScoped<ICloudinaryFileManager, CloudinaryFileManager>()`. Tests inject a Moq fake — no network.
+- [x] **Supporting refactors:** moved `MapperConfig` from `Api/Helpers` to `Core` (so the test project
+      reuses it without referencing the web project — Api still auto-discovers it via assembly scan);
+      guarded `Database.Migrate()` with `if (Database.IsRelational())` so the in-memory provider can
+      construct the context.
+- [x] **Domain class tests** — one test class per entity (8 game entities + `User`): construction,
+      property get/set round-trip, collection defaults initialized (covers requirement #11)
+- [x] **System operation tests** — one test class per manager (`Feature`, `GameType`, `PlatformType`,
+      `GameForm`); each operation gets happy-path + not-found/validation-path tests (covers requirement #12)
+- [x] `dotnet test` green — **52 passed, 0 failed**
 
 ---
 
@@ -171,17 +180,20 @@ Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (c
 - **2026-06-16** — **Dependency policy:** keep AutoMapper (13.0.1) and the .NET version pinned. Newer
   AutoMapper is commercially licensed, so we will not upgrade. The `NU1903` advisory is accepted; do
   not attempt to resolve it.
+- **2026-06-17** — Phase 3 (xUnit test project, 52 tests green) implemented on `feature/unit-tests`,
+  merged to `main` via `--no-ff`. Testability refactors: extracted `ICloudinaryFileManager`; relocated
+  `MapperConfig` from `Api/Helpers` to `Core`; guarded `Database.Migrate()` with `Database.IsRelational()`.
+  Requirements #11 and #12 now Met.
 
 ## Resume here (next session)
-- **Next:** Phase 3 — xUnit test project. Plan is below; includes the `ICloudinaryFileManager`
-  refactor so `GameFormManager` is testable without the Cloudinary network call.
-- Remaining after Phase 3: Phase 4 (class diagram + system-operations list artifacts) and Phase 5
-  (release tag `v1.0`).
+- **Next:** Phase 4 — submission artifacts: domain **class diagram** (≥8 classes) and the
+  **system-operations list** (≥12, derive from the Phase 1 endpoint list). Optional JSON hardening.
+- Then Phase 5 — git finalization: tag a release `v1.0` (`git tag -a v1.0 -m "Course submission"`) and
+  push tags. **Reminder:** `feature/unit-tests` and `main` have not been pushed yet — push when ready.
 
 ## Open items / risks
 
-- `GameFormManager` depends on the concrete `CloudinaryFileManager` (network). Needs an interface
-  extraction before it is unit-testable — tracked in Phase 3.
+- Branches `feature/unit-tests` (merged) and `main` are **local only** — not yet pushed to `origin`.
 - Leftover `Microsoft.EntityFrameworkCore.SqlServer` package reference after the Postgres switch
   (harmless, can be cleaned up).
 - README.md is still IdealWedding-specific and contradicts this repo (out of scope unless asked).

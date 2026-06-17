@@ -24,7 +24,13 @@ public class BrandedGamesDbContext : IdentityDbContext<User, Role, Guid, UserCla
 
     public BrandedGamesDbContext(DbContextOptions<BrandedGamesDbContext> options) : base(options)
     {
-        Database.Migrate();
+        // Migrations only apply to relational providers. Guarded so non-relational providers
+        // (for example the EF Core in-memory provider used by the test suite) can construct
+        // the context without attempting to run relational migrations.
+        if (Database.IsRelational())
+        {
+            Database.Migrate();
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

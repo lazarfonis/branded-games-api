@@ -63,7 +63,7 @@ try
     builder.Services.AddScoped<GameTypeManager>();
     builder.Services.AddScoped<PlatformTypeManager>();
     builder.Services.AddScoped<GameFormManager>();
-    builder.Services.AddScoped<CloudinaryFileManager>();
+    builder.Services.AddScoped<ICloudinaryFileManager, CloudinaryFileManager>();
 
     logger.Info("App: Configuring forwarded headers");
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
