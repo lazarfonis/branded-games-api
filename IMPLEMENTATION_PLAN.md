@@ -22,8 +22,8 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 |---|---|---|---|---|
 | 1 | Domain classes | ≥ 8 | ✅ Met | 8 game entities + Identity (see below) |
 | 2 | System operations | ≥ 12 | ✅ Met (19) | Full CRUD implemented (Phase 1) |
-| 3 | Class diagram artifact | submitted | ❌ | Produce before submission |
-| 4 | System-operations list artifact | submitted | ❌ | Produce before submission |
+| 3 | Class diagram artifact | submitted | ✅ Ready | `docs/class-diagram.md` (Mermaid, 8+ classes) — hand in |
+| 4 | System-operations list artifact | submitted | ✅ Ready | `docs/system-operations.md` (19 operations) — hand in |
 | 5 | Git uses own email | — | ✅ Met | `lazarst.pn@gmail.com` |
 | 6 | Visible history | — | ⚠️ Weak | Only 3 commits; grows as we work |
 | 7 | Branch create **and merge** | mandatory | ❌ | Do all phases on feature branches, `--no-ff` merge |
@@ -153,12 +153,15 @@ accepted NU1903 AutoMapper advisory remains).
 
 ---
 
-## Phase 4 — Submission artifacts
+## Phase 4 — Submission artifacts  (branch: `feature/submission-artifacts`)  ✅ DONE (committed + merged to `main` via `--no-ff`)
 
-- [ ] Domain **class diagram** (≥8 classes) — export image/PDF, place in repo or hand-in
-- [ ] **System-operations list** (≥12) — derive from Phase 1 final endpoint list
+- [x] Domain **class diagram** (≥8 classes) → `docs/class-diagram.md` — Mermaid `classDiagram` of the
+      8 game-domain classes + Identity (`User`/`Role`/`UserRole`) + `IEntity` and the two enums, with a
+      relationship summary table. Renders on GitHub; export to image/PDF from the preview for hand-in.
+- [x] **System-operations list** (≥12) → `docs/system-operations.md` — all **19** operations grouped by
+      resource (HTTP verb, route, request/response model, backing manager method).
 - [ ] (Optional) JSON hardening for a stronger defense: e.g. a JSON file export/import operation
-      or an explicit JSON-consuming endpoint
+      or an explicit JSON-consuming endpoint — **not done** (req #14 already Met; left as optional).
 
 ---
 
@@ -184,16 +187,22 @@ accepted NU1903 AutoMapper advisory remains).
   merged to `main` via `--no-ff`. Testability refactors: extracted `ICloudinaryFileManager`; relocated
   `MapperConfig` from `Api/Helpers` to `Core`; guarded `Database.Migrate()` with `Database.IsRelational()`.
   Requirements #11 and #12 now Met.
+- **2026-06-17** — Phase 4 (submission artifacts) implemented on `feature/submission-artifacts`, merged
+  to `main` via `--no-ff`. Added `docs/class-diagram.md` (Mermaid, 8+ classes) and
+  `docs/system-operations.md` (19 operations). Requirements #3 and #4 now Ready. Optional JSON hardening
+  deliberately skipped (req #14 already Met). Diagram uses Mermaid in markdown (renders on GitHub) — no
+  local diagram CLI available; export to image/PDF from the preview at hand-in time if the prof wants a file.
 
 ## Resume here (next session)
-- **Next:** Phase 4 — submission artifacts: domain **class diagram** (≥8 classes) and the
-  **system-operations list** (≥12, derive from the Phase 1 endpoint list). Optional JSON hardening.
-- Then Phase 5 — git finalization: tag a release `v1.0` (`git tag -a v1.0 -m "Course submission"`) and
-  push tags. **Reminder:** `feature/unit-tests` and `main` have not been pushed yet — push when ready.
+- **Next:** Phase 5 — git finalization: tag a release `v1.0` (`git tag -a v1.0 -m "Course submission"`)
+  and push tags + branches.
+- **Reminder:** `feature/unit-tests`, `feature/submission-artifacts`, and `main` have not been pushed
+  yet — push when ready (course requires visible history + at least one tag on GitHub).
 
 ## Open items / risks
 
-- Branches `feature/unit-tests` (merged) and `main` are **local only** — not yet pushed to `origin`.
+- Branches `feature/unit-tests` (merged), `feature/submission-artifacts` (merged) and `main` are
+  **local only** — not yet pushed to `origin`.
 - Leftover `Microsoft.EntityFrameworkCore.SqlServer` package reference after the Postgres switch
   (harmless, can be cleaned up).
 - README.md is still IdealWedding-specific and contradicts this repo (out of scope unless asked).
