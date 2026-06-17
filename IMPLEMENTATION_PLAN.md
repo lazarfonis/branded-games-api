@@ -25,9 +25,9 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 | 3 | Class diagram artifact | submitted | ✅ Ready | `docs/class-diagram.md` (Mermaid, 8+ classes) — hand in |
 | 4 | System-operations list artifact | submitted | ✅ Ready | `docs/system-operations.md` (19 operations) — hand in |
 | 5 | Git uses own email | — | ✅ Met | `lazarst.pn@gmail.com` |
-| 6 | Visible history | — | ⚠️ Weak | Only 3 commits; grows as we work |
-| 7 | Branch create **and merge** | mandatory | ❌ | Do all phases on feature branches, `--no-ff` merge |
-| 8 | Tags | mandatory | ❌ | Tag `v1.0` at the end |
+| 6 | Visible history | — | ✅ Met | Phased commits + 4 `--no-ff` merge commits pushed to `origin` |
+| 7 | Branch create **and merge** | mandatory | ✅ Met | 4 feature branches, each merged to `main` via `--no-ff` |
+| 8 | Tags | mandatory | ✅ Met | Annotated `v1.0` ("Course submission") pushed to `origin` |
 | 9 | Hosted (GitHub) | — | ✅ Met | `origin/main` exists |
 | 10 | Build via NuGet | mandatory | ✅ Met | SDK-style projects |
 | 11 | All domain classes tested | mandatory | ✅ Met | `BrandedGames.Tests` (xUnit) — domain test class per entity |
@@ -165,12 +165,14 @@ accepted NU1903 AutoMapper advisory remains).
 
 ---
 
-## Phase 5 — Git finalization
+## Phase 5 — Git finalization  ✅ DONE
 
-- [ ] Each phase done on its own feature branch
-- [ ] Merge each with `git merge --no-ff` so branch topology is visible in history
-- [ ] Tag a release: `git tag -a v1.0 -m "Course submission"` and push tags
-- [ ] Verify on GitHub: visible history, at least one merged branch, at least one tag
+- [x] Each phase done on its own feature branch (`feature/crud-operations`, `feature/xml-docs`,
+      `feature/unit-tests`, `feature/submission-artifacts`)
+- [x] Merge each with `git merge --no-ff` so branch topology is visible in history (4 merge commits)
+- [x] Tag a release: `git tag -a v1.0 -m "Course submission"` — pushed to `origin`
+- [x] Verify on GitHub: `git ls-remote` confirms all 4 branches + `main` + tag `v1.0` (dereferences to
+      `main` HEAD); the 4 `--no-ff` merge commits are visible in pushed history
 
 ---
 
@@ -192,17 +194,23 @@ accepted NU1903 AutoMapper advisory remains).
   `docs/system-operations.md` (19 operations). Requirements #3 and #4 now Ready. Optional JSON hardening
   deliberately skipped (req #14 already Met). Diagram uses Mermaid in markdown (renders on GitHub) — no
   local diagram CLI available; export to image/PDF from the preview at hand-in time if the prof wants a file.
+- **2026-06-17** — Phase 5 (git finalization) done. Pushed `main`, `feature/unit-tests`,
+  `feature/submission-artifacts`, and annotated tag `v1.0` ("Course submission") to `origin`
+  (`github.com:lazarfonis/branded-games-api`). Requirements #6, #7, #8 now Met. **All phases complete.**
 
 ## Resume here (next session)
-- **Next:** Phase 5 — git finalization: tag a release `v1.0` (`git tag -a v1.0 -m "Course submission"`)
-  and push tags + branches.
-- **Reminder:** `feature/unit-tests`, `feature/submission-artifacts`, and `main` have not been pushed
-  yet — push when ready (course requires visible history + at least one tag on GitHub).
+- **All phases (1–5) are complete.** The codebase is course-compliant: 19 system operations, XML docs
+  (zero-warning required surface), 52 xUnit tests, class-diagram + operations-list artifacts in `docs/`,
+  4 `--no-ff`-merged feature branches and tag `v1.0` on GitHub.
+- Only optional follow-ups remain (see below): JSON hardening, SqlServer package cleanup, README rewrite.
+- For the hand-in itself: export `docs/class-diagram.md` to an image/PDF if the professor wants a file.
 
 ## Open items / risks
 
-- Branches `feature/unit-tests` (merged), `feature/submission-artifacts` (merged) and `main` are
-  **local only** — not yet pushed to `origin`.
+- ~~Branches/tags not pushed~~ — **resolved (Phase 5):** `main`, all feature branches, and tag `v1.0`
+  are on `origin`.
 - Leftover `Microsoft.EntityFrameworkCore.SqlServer` package reference after the Postgres switch
   (harmless, can be cleaned up).
 - README.md is still IdealWedding-specific and contradicts this repo (out of scope unless asked).
+- The IDE can rewrite `BrandedGames.sln` and drop CLI-added projects — verify the `.sln` diff before
+  committing after using `dotnet sln add`.
