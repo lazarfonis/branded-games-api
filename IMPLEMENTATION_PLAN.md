@@ -98,7 +98,7 @@ Strategy: **full CRUD on existing entities** (no new domain). **20 operations to
 
 ## Phase 2 — XML documentation  (branch: `feature/xml-docs`)  ✅ DONE (committed + merged to `main` via `--no-ff`)
 
-Reference: matched the doc style in `/Users/lazar/Projects/ideal-wedding-api` (controller-level
+Reference: standard XML doc-comment style (controller-level
 `<summary>`/`<param>`/`<returns>`, doc-gen for Swagger). Build verified: 0 errors.
 
 - [x] Enabled `<GenerateDocumentationFile>true</GenerateDocumentationFile>` on `Entities` + `Core` (Api already had it).
@@ -202,7 +202,7 @@ accepted NU1903 AutoMapper advisory remains).
 - **All phases (1–5) are complete.** The codebase is course-compliant: 19 system operations, XML docs
   (zero-warning required surface), 52 xUnit tests, class-diagram + operations-list artifacts in `docs/`,
   4 `--no-ff`-merged feature branches and tag `v1.0` on GitHub.
-- Only optional follow-ups remain (see below): JSON hardening, README rewrite.
+- Only optional follow-ups remain (see below): JSON hardening.
 - For the hand-in itself: export `docs/class-diagram.md` to an image/PDF if the professor wants a file.
 
 ## Open items / risks
@@ -211,6 +211,7 @@ accepted NU1903 AutoMapper advisory remains).
   are on `origin`.
 - Database provider switched back to SQL Server (`Microsoft.EntityFrameworkCore.SqlServer`); the
   Npgsql packages were removed and the `Initial` migration regenerated for SQL Server.
-- README.md is still IdealWedding-specific and contradicts this repo (out of scope unless asked).
+- ~~README.md is still IdealWedding-specific~~ — **resolved:** README rewritten for Branded Games
+  (tech stack, build/run, migrations, tests, auth).
 - The IDE can rewrite `BrandedGames.sln` and drop CLI-added projects — verify the `.sln` diff before
   committing after using `dotnet sln add`.
