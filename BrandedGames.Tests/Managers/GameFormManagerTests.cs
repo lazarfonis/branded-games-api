@@ -41,6 +41,25 @@ public class GameFormManagerTests
     }
 
     [Fact]
+    public async Task GetMyGames_ReturnsOnlyGamesOwnedByUser()
+    {
+        using var db = TestDbContextFactory.Create();
+        var gameType = SeedGameType(db);
+        var userId = Guid.NewGuid();
+        var otherUserId = Guid.NewGuid();
+        db.GameForms.Add(new GameForm { Id = Guid.NewGuid(), GameTypeId = gameType.Id, GameType = gameType, UserId = userId });
+        db.GameForms.Add(new GameForm { Id = Guid.NewGuid(), GameTypeId = gameType.Id, GameType = gameType, UserId = otherUserId });
+        db.GameForms.Add(new GameForm { Id = Guid.NewGuid(), GameTypeId = gameType.Id, GameType = gameType, UserId = null });
+        await db.SaveChangesAsync();
+        var manager = CreateManager(db);
+
+        var result = await manager.GetMyGames(userId);
+
+        var game = Assert.Single(result);
+        Assert.Equal(userId, game.UserId);
+    }
+
+    [Fact]
     public async Task GetGame_WhenExists_ReturnsProjectedGame()
     {
         using var db = TestDbContextFactory.Create();
@@ -136,6 +155,45 @@ public class GameFormManagerTests
         Assert.Equal("logo.png", persistedFile.FileOriginalName);
         Assert.Equal(FileType.Image, persistedFile.FileType);
         fileManagerMock.Verify(m => m.ProcessFileStorageUpload(It.IsAny<IFormFile>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Create_WithUser_PersistsOwner()
+    {
+        using var db = TestDbContextFactory.Create();
+        var gameType = SeedGameType(db);
+        await db.SaveChangesAsync();
+        var userId = Guid.NewGuid();
+        var manager = CreateManager(db);
+        var model = new GameFormCreateModel
+        {
+            GameTypeId = gameType.Id,
+            CustomerType = CustomerType.Brand
+        };
+
+        await manager.Create(model, userId);
+
+        var persistedGame = Assert.Single(db.GameForms);
+        Assert.Equal(userId, persistedGame.UserId);
+    }
+
+    [Fact]
+    public async Task Create_WithoutUser_LeavesOwnerNull()
+    {
+        using var db = TestDbContextFactory.Create();
+        var gameType = SeedGameType(db);
+        await db.SaveChangesAsync();
+        var manager = CreateManager(db);
+        var model = new GameFormCreateModel
+        {
+            GameTypeId = gameType.Id,
+            CustomerType = CustomerType.Brand
+        };
+
+        await manager.Create(model);
+
+        var persistedGame = Assert.Single(db.GameForms);
+        Assert.Null(persistedGame.UserId);
     }
 
     [Fact]

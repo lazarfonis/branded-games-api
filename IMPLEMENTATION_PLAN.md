@@ -21,9 +21,9 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 | # | Requirement | Target | Status | Notes |
 |---|---|---|---|---|
 | 1 | Domain classes | ≥ 8 | ✅ Met | 8 game entities + Identity (see below) |
-| 2 | System operations | ≥ 12 | ✅ Met (19) | Full CRUD implemented (Phase 1) |
+| 2 | System operations | ≥ 12 | ✅ Met (20) | Full CRUD implemented (Phase 1) |
 | 3 | Class diagram artifact | submitted | ✅ Ready | `docs/class-diagram.md` (Mermaid, 8+ classes) — hand in |
-| 4 | System-operations list artifact | submitted | ✅ Ready | `docs/system-operations.md` (19 operations) — hand in |
+| 4 | System-operations list artifact | submitted | ✅ Ready | `docs/system-operations.md` (20 operations) — hand in |
 | 5 | Git uses own email | — | ✅ Met | `lazarst.pn@gmail.com` |
 | 6 | Visible history | — | ✅ Met | Phased commits + 4 `--no-ff` merge commits pushed to `origin` |
 | 7 | Branch create **and merge** | mandatory | ✅ Met | 4 feature branches, each merged to `main` via `--no-ff` |
@@ -38,7 +38,7 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 
 ## Current state snapshot (baseline)
 
-- **Solution:** .NET 8, 5 projects — `Api → Core → Data → Entities`, all → `Common`. PostgreSQL/EF Core.
+- **Solution:** .NET 8, 5 projects — `Api → Core → Data → Entities`, all → `Common`. SQL Server/EF Core.
 - **Domain classes (8+):** `GameForm`, `GameFeature`, `GameType`, `PlatformType`, `GameFormFeature`,
   `GameFormPlatformType`, `GameFormFile`, `User` (+ Identity: `Role`, `UserRole`, etc.).
 - **System operations today (4):**
@@ -52,7 +52,7 @@ The spec is written for Java/Maven. We are on the approved alternative track, so
 
 ## Phase 1 — System operations: 4 → ≥12  (branch: `feature/crud-operations`)  ✅ DONE (committed + merged to `main` via `--no-ff`)
 
-Strategy: **full CRUD on existing entities** (no new domain). **19 operations total** — clears the ≥12 bar.
+Strategy: **full CRUD on existing entities** (no new domain). **20 operations total** — clears the ≥12 bar.
 "Existing" = already implemented, leave as-is. Build verified clean (0 errors).
 
 ### Feature (`GameFeature`)
@@ -158,7 +158,7 @@ accepted NU1903 AutoMapper advisory remains).
 - [x] Domain **class diagram** (≥8 classes) → `docs/class-diagram.md` — Mermaid `classDiagram` of the
       8 game-domain classes + Identity (`User`/`Role`/`UserRole`) + `IEntity` and the two enums, with a
       relationship summary table. Renders on GitHub; export to image/PDF from the preview for hand-in.
-- [x] **System-operations list** (≥12) → `docs/system-operations.md` — all **19** operations grouped by
+- [x] **System-operations list** (≥12) → `docs/system-operations.md` — all **20** operations grouped by
       resource (HTTP verb, route, request/response model, backing manager method).
 - [ ] (Optional) JSON hardening for a stronger defense: e.g. a JSON file export/import operation
       or an explicit JSON-consuming endpoint — **not done** (req #14 already Met; left as optional).
@@ -202,15 +202,15 @@ accepted NU1903 AutoMapper advisory remains).
 - **All phases (1–5) are complete.** The codebase is course-compliant: 19 system operations, XML docs
   (zero-warning required surface), 52 xUnit tests, class-diagram + operations-list artifacts in `docs/`,
   4 `--no-ff`-merged feature branches and tag `v1.0` on GitHub.
-- Only optional follow-ups remain (see below): JSON hardening, SqlServer package cleanup, README rewrite.
+- Only optional follow-ups remain (see below): JSON hardening, README rewrite.
 - For the hand-in itself: export `docs/class-diagram.md` to an image/PDF if the professor wants a file.
 
 ## Open items / risks
 
 - ~~Branches/tags not pushed~~ — **resolved (Phase 5):** `main`, all feature branches, and tag `v1.0`
   are on `origin`.
-- Leftover `Microsoft.EntityFrameworkCore.SqlServer` package reference after the Postgres switch
-  (harmless, can be cleaned up).
+- Database provider switched back to SQL Server (`Microsoft.EntityFrameworkCore.SqlServer`); the
+  Npgsql packages were removed and the `Initial` migration regenerated for SQL Server.
 - README.md is still IdealWedding-specific and contradicts this repo (out of scope unless asked).
 - The IDE can rewrite `BrandedGames.sln` and drop CLI-added projects — verify the `.sln` diff before
   committing after using `dotnet sln add`.

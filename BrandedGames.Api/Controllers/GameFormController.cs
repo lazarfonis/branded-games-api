@@ -1,5 +1,7 @@
+using BrandedGames.Api.Authentication;
 using BrandedGames.Common.Models;
 using BrandedGames.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BrandedGames.Api.Controllers;
@@ -30,6 +32,17 @@ public class GameFormController : BaseController
         return Ok(result);
     }
 
+    /// <summary>Gets the game forms submitted by the currently authenticated user.</summary>
+    /// <returns>GameFormModels</returns>
+    [HttpGet("mine")]
+    [Authorize(Policy = Policies.RegisteredUser)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<GameFormModel>))]
+    public async Task<IActionResult> GetMyGames()
+    {
+        var result = await gameFormManager.GetMyGames(GetCurrentUserId()!.Value);
+        return Ok(result);
+    }
+
     /// <summary>Gets a single game form by its identifier.</summary>
     /// <param name="id">Game form identifier</param>
     /// <returns>GameFormModel</returns>
@@ -49,7 +62,7 @@ public class GameFormController : BaseController
     public async Task<IActionResult> CreateGame([FromForm] GameFormCreateModel model)
     {
         model.Files = model.Files.Any() ? model.Files : Request.Form.Files.ToList();
-        await gameFormManager.Create(model);
+        await gameFormManager.Create(model, GetCurrentUserId());
         return NoContent();
     }
 

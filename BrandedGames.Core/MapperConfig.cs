@@ -18,7 +18,7 @@ public class MapperConfig : Profile
         CreateMap<GameForm, GameFormModel>()
             .ForMember(d => d.GameTypeName, o => o.MapFrom(s => s.GameType.Name))
             .ForMember(d => d.Features, o => o.MapFrom(s => s.Features.Select(f => f.GameFeature)))
-            .ForMember(d => d.PlatformTypes, o => o.MapFrom(s => s.GameFormPlatformTypes.Select(p => p.PlatformType)))
+            .ForMember(d => d.PlatformTypes, o => o.MapFrom(s => s.Platforms.Select(p => p.PlatformType)))
             .ForMember(d => d.Files, o => o.MapFrom(s => s.Files));
 
         // Write mappings (create/update model -> entity)

@@ -7,6 +7,7 @@ public class GameFormModel
     public Guid Id { get; set; }
     public Guid GameTypeId { get; set; }
     public string GameTypeName { get; set; }
+    public Guid? UserId { get; set; }
     public CustomerType CustomerType { get; set; }
     public int? Price { get; set; }
     public string Items { get; set; }

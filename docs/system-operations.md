@@ -1,7 +1,7 @@
 # System Operations
 
 > Course requirement #4 — list of system operations with a target of **≥ 12**. This API exposes
-> **19 system operations** across four resources. Each operation is a thin controller action that
+> **20 system operations** across four resources. Each operation is a thin controller action that
 > delegates to a manager method (the business-logic layer); see the per-row "Manager method".
 >
 > Base path: `/api`. All payloads are JSON except game-form creation, which is `multipart/form-data`
@@ -14,8 +14,8 @@
 | Feature | `FeatureController` (`api/features`) | 5 |
 | Game type | `GameTypeController` (`api/game-types`) | 5 |
 | Platform type | `PlatformTypeController` (`api/platform-types`) | 5 |
-| Game form | `GameFormController` (`api/customer-games`) | 4 |
-| **Total** | | **19** |
+| Game form | `GameFormController` (`api/customer-games`) | 5 |
+| **Total** | | **20** |
 
 ## Feature — `GameFeature`
 
@@ -52,16 +52,19 @@
 | # | Operation | HTTP | Route | Request body | Success | Manager method |
 |---|---|---|---|---|---|---|
 | 16 | Get all game forms | GET | `/api/customer-games` | — | 200 `GameFormModel[]` | `GameFormManager.GetGames()` |
-| 17 | Get game form by id | GET | `/api/customer-games/{id}` | — | 200 `GameFormModel` | `GameFormManager.GetGame(id)` |
-| 18 | Create game form | POST | `/api/customer-games` | `GameFormCreateModel` (`multipart/form-data`, incl. files) | 204 | `GameFormManager.Create(model)` |
-| 19 | Delete game form | DELETE | `/api/customer-games/{id}` | — | 204 | `GameFormManager.DeleteGame(id)` |
+| 17 | Get my game forms | GET | `/api/customer-games/mine` | — | 200 `GameFormModel[]` | `GameFormManager.GetMyGames(userId)` |
+| 18 | Get game form by id | GET | `/api/customer-games/{id}` | — | 200 `GameFormModel` | `GameFormManager.GetGame(id)` |
+| 19 | Create game form | POST | `/api/customer-games` | `GameFormCreateModel` (`multipart/form-data`, incl. files) | 204 | `GameFormManager.Create(model, userId)` |
+| 20 | Delete game form | DELETE | `/api/customer-games/{id}` | — | 204 | `GameFormManager.DeleteGame(id)` |
 
 > Notes
-> - Operation 18 creates a game form together with its selected features, target platforms and
+> - Operation 17 (`/mine`) is restricted to authenticated users (`Policies.RegisteredUser`) and
+>   returns only the game forms submitted by the current user.
+> - Operation 19 creates a game form together with its selected features, target platforms and
 >   uploaded files inside a single database transaction; files are pushed to the storage provider via
 >   `ICloudinaryFileManager`.
 > - Missing entities surface as `404 Not Found` through `ValidationHelper.MustExist<T>()`; validation
 >   failures surface as `400 Bad Request`. Both are translated to JSON problem responses by the
 >   exception-handling middleware.
-> - Each of these 19 operations is exercised by the `BrandedGames.Tests` xUnit suite (course
+> - These operations are exercised by the `BrandedGames.Tests` xUnit suite (course
 >   requirement #12).

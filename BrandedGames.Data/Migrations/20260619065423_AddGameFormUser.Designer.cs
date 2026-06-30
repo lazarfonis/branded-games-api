@@ -4,6 +4,7 @@ using BrandedGames.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrandedGames.Data.Migrations
 {
     [DbContext(typeof(BrandedGamesDbContext))]
-    partial class BrandedGamesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260619065423_AddGameFormUser")]
+    partial class AddGameFormUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -491,13 +494,13 @@ namespace BrandedGames.Data.Migrations
             modelBuilder.Entity("BrandedGames.Entities.GameFormPlatformType", b =>
                 {
                     b.HasOne("BrandedGames.Entities.GameForm", "GameForm")
-                        .WithMany("Platforms")
+                        .WithMany("GameFormPlatformTypes")
                         .HasForeignKey("GameFormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BrandedGames.Entities.PlatformType", "PlatformType")
-                        .WithMany("GameForms")
+                        .WithMany("GameFormPlatformTypes")
                         .HasForeignKey("PlatformTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -589,7 +592,7 @@ namespace BrandedGames.Data.Migrations
 
                     b.Navigation("Files");
 
-                    b.Navigation("Platforms");
+                    b.Navigation("GameFormPlatformTypes");
                 });
 
             modelBuilder.Entity("BrandedGames.Entities.GameType", b =>
@@ -606,7 +609,7 @@ namespace BrandedGames.Data.Migrations
 
             modelBuilder.Entity("BrandedGames.Entities.PlatformType", b =>
                 {
-                    b.Navigation("GameForms");
+                    b.Navigation("GameFormPlatformTypes");
                 });
 
             modelBuilder.Entity("BrandedGames.Entities.User", b =>

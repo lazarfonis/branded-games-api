@@ -68,4 +68,8 @@ public class User : IdentityUser<Guid>, IEntity
 
     /// <summary>The roles assigned to the user.</summary>
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
+
+    /// <summary>The game forms submitted by this user.</summary>
+    [InverseProperty(nameof(GameForm.User))]
+    public virtual ICollection<GameForm> GameForms { get; set; } = new HashSet<GameForm>();
 }

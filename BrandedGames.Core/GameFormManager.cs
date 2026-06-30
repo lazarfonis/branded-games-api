@@ -43,6 +43,14 @@ public class GameFormManager
         return await mapper.ProjectTo<GameFormModel>(db.GameForms).ToListAsync();
     }
 
+    /// <summary>Gets the game forms submitted by a specific user.</summary>
+    /// <param name="userId">The identifier of the submitting user.</param>
+    /// <returns>The user's game forms.</returns>
+    public async Task<List<GameFormModel>> GetMyGames(Guid userId)
+    {
+        return await mapper.ProjectTo<GameFormModel>(db.GameForms.Where(g => g.UserId == userId)).ToListAsync();
+    }
+
     /// <summary>Gets a single game form by its identifier.</summary>
     /// <param name="id">The game form identifier.</param>
     /// <returns>The requested game form.</returns>
@@ -68,7 +76,8 @@ public class GameFormManager
     /// uploaded files. The whole operation runs in a single database transaction.
     /// </summary>
     /// <param name="model">The game configuration to create.</param>
-    public async Task Create(GameFormCreateModel model)
+    /// <param name="userId">Identifier of the user submitting the form, or null if anonymous.</param>
+    public async Task Create(GameFormCreateModel model, Guid? userId = null)
     {
         var gameTypeExists = await db.GameTypes.AnyAsync(gt => gt.Id == model.GameTypeId);
         ValidationHelper.MustExist<GameType>(gameTypeExists);
@@ -90,6 +99,7 @@ public class GameFormManager
             var gameForm = new GameForm
             {
                 GameTypeId = model.GameTypeId,
+                UserId = userId,
                 CustomerType = model.CustomerType,
                 Price = model.Price,
                 Items = model.Items,

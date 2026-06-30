@@ -6,7 +6,7 @@ namespace BrandedGames.Tests.Infrastructure;
 
 /// <summary>
 /// Builds <see cref="BrandedGamesDbContext"/> instances backed by the EF Core in-memory
-/// provider so managers can be exercised without a real PostgreSQL database.
+/// provider so managers can be exercised without a real SQL Server database.
 /// </summary>
 public static class TestDbContextFactory
 {

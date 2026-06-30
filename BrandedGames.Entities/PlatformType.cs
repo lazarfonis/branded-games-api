@@ -26,5 +26,5 @@ public class PlatformType
 
     /// <summary>The game forms targeting this platform (join to <see cref="GameForm"/>).</summary>
     [InverseProperty(nameof(GameFormPlatformType.PlatformType))]
-    public virtual ICollection<GameFormPlatformType> GameFormPlatformTypes { get; set; } = new HashSet<GameFormPlatformType>();
+    public virtual ICollection<GameFormPlatformType> GameForms { get; set; } = new HashSet<GameFormPlatformType>();
 }

@@ -6,12 +6,12 @@ namespace BrandedGames.Tests.Domain;
 public class PlatformTypeTests
 {
     [Fact]
-    public void GameFormPlatformTypes_Collection_IsInitialized_AndEmpty_ByDefault()
+    public void GameForms_Collection_IsInitialized_AndEmpty_ByDefault()
     {
         var platform = new PlatformType();
 
-        Assert.NotNull(platform.GameFormPlatformTypes);
-        Assert.Empty(platform.GameFormPlatformTypes);
+        Assert.NotNull(platform.GameForms);
+        Assert.Empty(platform.GameForms);
     }
 
     [Fact]
@@ -34,12 +34,12 @@ public class PlatformTypeTests
     }
 
     [Fact]
-    public void GameFormPlatformTypes_Collection_AcceptsItems()
+    public void GameForms_Collection_AcceptsItems()
     {
         var platform = new PlatformType();
 
-        platform.GameFormPlatformTypes.Add(new GameFormPlatformType());
+        platform.GameForms.Add(new GameFormPlatformType());
 
-        Assert.Single(platform.GameFormPlatformTypes);
+        Assert.Single(platform.GameForms);
     }
 }

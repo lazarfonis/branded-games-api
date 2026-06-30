@@ -27,7 +27,7 @@ dotnet ef migrations add <MigrationName> --project BrandedGames.Data -s BrandedG
 dotnet ef database update --project BrandedGames.Data -s BrandedGames.Api
 ```
 
-The database is PostgreSQL (Npgsql). `Database.Migrate()` runs in the `BrandedGamesDbContext` constructor, so pending migrations are applied automatically on startup. The `BrandedGamesDb` connection string lives in `appsettings.Development.json` (git-ignored).
+The database is SQL Server (`Microsoft.EntityFrameworkCore.SqlServer`). `Database.Migrate()` runs in the `BrandedGamesDbContext` constructor, so pending migrations are applied automatically on startup. The `BrandedGamesDb` connection string lives in `appsettings.Development.json` (git-ignored).
 
 ## No Tests
 

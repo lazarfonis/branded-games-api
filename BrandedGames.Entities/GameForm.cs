@@ -21,6 +21,9 @@ public class GameForm
     /// <summary>Identifier of the <see cref="GameType"/> this game is based on.</summary>
     public Guid GameTypeId { get; set; }
 
+    /// <summary>Identifier of the <see cref="User"/> who submitted this game form, if any.</summary>
+    public Guid? UserId { get; set; }
+
     /// <summary>The type of customer the game is created for.</summary>
     public CustomerType CustomerType { get; set; }
 
@@ -44,6 +47,11 @@ public class GameForm
     [InverseProperty(nameof(Entities.GameType.GameForms))]
     public virtual GameType GameType { get; set; }
 
+    /// <summary>The user who submitted this game form, if any.</summary>
+    [ForeignKey(nameof(UserId))]
+    [InverseProperty(nameof(Entities.User.GameForms))]
+    public virtual User User { get; set; }
+
     /// <summary>The features selected for this game (join to <see cref="GameFeature"/>).</summary>
     [InverseProperty(nameof(GameFormFeature.GameForm))]
     public virtual ICollection<GameFormFeature> Features { get; set; } = new HashSet<GameFormFeature>();
@@ -54,5 +62,5 @@ public class GameForm
 
     /// <summary>The platforms this game targets (join to <see cref="PlatformType"/>).</summary>
     [InverseProperty(nameof(GameFormPlatformType.GameForm))]
-    public virtual ICollection<GameFormPlatformType> GameFormPlatformTypes { get; set; } = new HashSet<GameFormPlatformType>();
+    public virtual ICollection<GameFormPlatformType> Platforms { get; set; } = new HashSet<GameFormPlatformType>();
 }

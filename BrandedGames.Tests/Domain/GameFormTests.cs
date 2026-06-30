@@ -15,8 +15,8 @@ public class GameFormTests
         Assert.Empty(gameForm.Features);
         Assert.NotNull(gameForm.Files);
         Assert.Empty(gameForm.Files);
-        Assert.NotNull(gameForm.GameFormPlatformTypes);
-        Assert.Empty(gameForm.GameFormPlatformTypes);
+        Assert.NotNull(gameForm.Platforms);
+        Assert.Empty(gameForm.Platforms);
     }
 
     [Fact]
@@ -65,10 +65,10 @@ public class GameFormTests
 
         gameForm.Features.Add(new GameFormFeature());
         gameForm.Files.Add(new GameFormFile());
-        gameForm.GameFormPlatformTypes.Add(new GameFormPlatformType());
+        gameForm.Platforms.Add(new GameFormPlatformType());
 
         Assert.Single(gameForm.Features);
         Assert.Single(gameForm.Files);
-        Assert.Single(gameForm.GameFormPlatformTypes);
+        Assert.Single(gameForm.Platforms);
     }
 }

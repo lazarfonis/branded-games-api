@@ -9,5 +9,5 @@ namespace BrandedGames.Common.Enums;
 public enum FileType
 {
     Image = 1,
-    Music = 2
+    Audio = 2
 }

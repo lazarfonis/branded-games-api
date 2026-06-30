@@ -21,11 +21,11 @@ public class GameFormPlatformType
 
     /// <summary>The related game form.</summary>
     [ForeignKey(nameof(GameFormId))]
-    [InverseProperty(nameof(Entities.GameForm.GameFormPlatformTypes))]
+    [InverseProperty(nameof(Entities.GameForm.Platforms))]
     public virtual GameForm GameForm { get; set; }
 
     /// <summary>The related platform type.</summary>
     [ForeignKey(nameof(PlatformTypeId))]
-    [InverseProperty(nameof(Entities.PlatformType.GameFormPlatformTypes))]
+    [InverseProperty(nameof(Entities.PlatformType.GameForms))]
     public virtual PlatformType PlatformType { get; set; }
 }

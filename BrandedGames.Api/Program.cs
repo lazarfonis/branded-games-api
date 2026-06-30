@@ -94,7 +94,7 @@ try
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     logger.Info("App: Configuring DB Connections");
-    builder.Services.AddDbContext<BrandedGamesDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("BrandedGamesDb")));
+    builder.Services.AddDbContext<BrandedGamesDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("BrandedGamesDb")));
 
     logger.Info("App: Configuring web api / controllers");
     builder.Services.AddMemoryCache();

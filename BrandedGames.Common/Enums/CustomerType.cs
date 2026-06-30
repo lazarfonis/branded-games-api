@@ -9,8 +9,7 @@ namespace BrandedGames.Common.Enums;
 public enum CustomerType
 {
     Influencer = 1,
-    InfluencerPromotingABrand = 2,
-    Brand = 3,
-    IndividualUser = 4,
-    Other = 5
+    Brand = 2,
+    IndividualUser = 3,
+    Other = 4
 }
